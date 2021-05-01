@@ -32,3 +32,7 @@
 #welcome {
     font-family: 'Poppins', sans-serif;
 }
+
+#live-chart {
+    min-height: 70vh;
+}
