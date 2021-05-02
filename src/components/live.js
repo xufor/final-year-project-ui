@@ -17,12 +17,21 @@ class Live extends Component {
   constructor(props) {
     super(props);
     this.interval = null;
-    this.last_ts = null;
+    this.liveChart = null;
+    this.lastTimestamp = 0;
   }
 
   componentDidMount() {
+    this.initializeChart();
+    this.lastTimestamp = Math.floor((new Date().getTime())/1000)-5;
+    this.interval = setInterval(this.requestDataAndUpdateChart(), 3000); 
+    // although requestDataAndUpdateChart is called here, it will return reference to itself
+    // using this we ensure that the function is called once and then further at intervals of 3 seconds
+  }
+
+  initializeChart = () => {
     var ctx = document.getElementById('live-chart').getContext('2d');
-    var liveChart = new Chart(ctx, {
+    this.liveChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: [],
@@ -43,11 +52,12 @@ class Live extends Component {
         }
       }
     });
-    this.last_ts = (new Date().getTime())/1000;
-    this.interval = setInterval(() => {
-      axios.get(URL + `/fetch/${this.last_ts}`)
+  }
+
+  requestDataAndUpdateChart = () => {
+    axios.get(URL + `/fetch/${this.lastTimestamp}`)
         .then((response) => {
-          if(response.data === "nnda") {
+          if(response.data === "No new data") {
             alert("No newer data available.");
             clearInterval(this.interval);
           }
@@ -61,14 +71,14 @@ class Live extends Component {
                     dateObject.getMinutes().toString() + 
                     ":" + 
                     dateObject.getSeconds().toString();
-            if(liveChart.data.labels.length === 15) {
-              liveChart.data.labels.shift();
-              liveChart.data.datasets[0].data.shift(); 
+            if(this.liveChart.data.labels.length === 15) {
+              this.liveChart.data.labels.shift();
+              this.liveChart.data.datasets[0].data.shift(); 
             }
-            liveChart.data.labels.push(s);
-            liveChart.data.datasets[0].data.push(Math.random() * (50 - 20) + 20); 
-            liveChart.update();
-            this.last_ts = receivedTimestamp;
+            this.liveChart.data.labels.push(s);
+            this.liveChart.data.datasets[0].data.push(Math.random() * (50 - 20) + 20); 
+            this.liveChart.update();
+            this.lastTimestamp = receivedTimestamp;
           }
         })
         .catch((error) => {
@@ -76,7 +86,7 @@ class Live extends Component {
           console.log("Error in making get request.")
           console.log(error);
         })
-    }, 5000);
+        return this.requestDataAndUpdateChart; // returning reference to the same function
   }
 
   componentWillUnmount() {
@@ -85,7 +95,7 @@ class Live extends Component {
 
   render() {
     return (
-      <div>
+      <div id="live-char-wrapper">
         <canvas id="live-chart"></canvas>
       </div>
     );

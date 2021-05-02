@@ -1,10 +1,17 @@
-#main {
-    min-height: 100vh;
+html, body {
+    height: 100%;
 }
-  
+
+#root {
+    height: inherit;
+}
+
+#main {
+    height: inherit;
+}
+
 #topbar {
     font-family: 'Lobster', cursive;
-    min-height: 12vh;
 }
   
 #middlebar {
@@ -13,26 +20,24 @@
 }
   
 #content {
-    min-height: 85vh;
-}
-
-#menu {
-    border-right: 1px #0b0b0c2e solid;
+    height: inherit;
     font-family: 'Poppins', sans-serif;
 }
 
+#menu {
+    background: white;
+    border-right: 1px #0b0b0c2e solid;
+}
+
 #content-area {
-    background-color: rgb(21 21 21 / 2%);
+    height: inherit;
 }
 
 .list-group-item {
     border-bottom: 1px solid #0b0b0c2e!important;
 }
 
-#welcome {
-    font-family: 'Poppins', sans-serif;
-}
-
-#live-chart {
-    min-height: 70vh;
+#live-char-wrapper {
+    width: 75%;
+    height: 75%;
 }

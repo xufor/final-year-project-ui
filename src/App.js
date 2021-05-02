@@ -37,13 +37,13 @@ class App extends Component {
               <div className="h1 text-white mb-0 align-middle">
                 DataView
               </div>
-            </Col>
+            </Col>  
           </Row>
-          <Row id="middlebar" className="m-0">
+          <Row id="middlebar" className="m-0 d-none d-lg-block">
             <Col><div/></Col>
           </Row>
-          <Row id="content" className="m-0 no-gutters">
-            <Col id="menu" className="col-12 col-md-2">
+          <Row id="content" className="m-0 no-gutters align-content-start">
+            <Col id="menu" className="col-12 col-lg-2">
               <ListGroup variant="flush" className="text-center">
                 <ListGroup.Item action onClick={() => this.onClickMenuItem(1)}>Live Data</ListGroup.Item>
                 <ListGroup.Item action onClick={() => this.onClickMenuItem(2)}>Export Data</ListGroup.Item>
@@ -51,7 +51,7 @@ class App extends Component {
                 <ListGroup.Item action onClick={() => this.onClickMenuItem(4)}>Metrices</ListGroup.Item>
               </ListGroup>
             </Col>
-            <Col id="content-area" className="col-12 col-md-10 d-flex justify-content-center align-items-center">
+            <Col id="content-area" className="col-12 col-lg-10 d-flex justify-content-center align-items-center">
               {this.selectContentToRender()}
             </Col>
           </Row>
