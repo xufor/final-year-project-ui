@@ -14,13 +14,13 @@ class Query extends Component {
     }
   }
 
-  onDateTimeRangeChange = (changedValue) => {
+  onDateTimeChange = (changedValue) => {
     this.pickedValue = changedValue;
   }
 
   onQueryClick = () => {
     const requestTimestamp = Math.floor((this.pickedValue.getTime())/1000);
-    axios.get(URL + `/query/${requestTimestamp}`)
+    axios.get(URL + `/query/min/${requestTimestamp}`)
         .then((response) => {
           if(response.data === "No rows fetched") {
             alert("No data available.");
@@ -36,21 +36,26 @@ class Query extends Component {
   }
   
   generateTable = (tableData) => {
-    tableData = tableData.split("#")
+    tableData = tableData.split("\n")
     tableData.pop()
     return(
       <Table striped bordered hover size="sm" className="w-75">
         <thead>
           <tr>
             <th>Time</th>
-            <th>Temp</th>
+            <th>Temperature(Celcius)</th>
           </tr>
         </thead>
         <tbody>
           {
             tableData.map((element) => {
-              let arr = element.split("-")
-              return <tr key={`${arr[0]}`}><td>{arr[0]}</td><td>{arr[1]}</td></tr>;
+              let arr = element.split(",")
+              return (
+                <tr key={`${arr[0]}`}>
+                  <td>{new Date(Number.parseInt(arr[0])*1000).toTimeString()}</td>
+                  <td>{arr[1]}</td>
+                </tr>
+              );
             })
           }
         </tbody>
@@ -61,7 +66,7 @@ class Query extends Component {
   render() {
     return (
       <React.Fragment>
-        <DateTimePicker onChange={this.onDateTimeRangeChange} value={this.pickedValue}/>
+        <DateTimePicker onChange={this.onDateTimeChange} value={this.pickedValue}/>
         <Button variant="success" size="sm" className="ml-2" onClick={this.onQueryClick}>
           Query Data
         </Button>

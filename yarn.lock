@@ -2173,6 +2173,19 @@
   resolved "https://registry.yarnpkg.com/@wojtekmaj/date-utils/-/date-utils-1.0.3.tgz#2dcfd92881425c5923e429c2aec86fb3609032a1"
   integrity sha512-1VPkkTBk07gMR1fjpBtse4G+oJqpmE+0gUFB0dg3VIL7qJmUVaBoD/vlzMm/jNeOPfvlmerl1lpnsZyBUFIRuw==
 
+"@wojtekmaj/react-datetimerange-picker@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@wojtekmaj/react-datetimerange-picker/-/react-datetimerange-picker-3.2.0.tgz#f9567da79b572c3555d3b2bd648596d9acea2425"
+  integrity sha512-cuzZytreBi19YzOyloVAFsnfb00+8236Y3t4BshJsej5imYL4yr5U518o5Ts/dHkZ9cqyhx3CNhEcctQifMzFw==
+  dependencies:
+    make-event-props "^1.1.0"
+    merge-class-names "^1.1.1"
+    prop-types "^15.6.0"
+    react-calendar "^3.3.1"
+    react-clock "^3.0.0"
+    react-datetime-picker "^3.2.0"
+    react-fit "^1.0.3"
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -9141,7 +9154,7 @@ react-date-picker@^8.1.0:
     react-fit "^1.0.3"
     update-input-width "^1.1.1"
 
-react-datetime-picker@^3.2.1:
+react-datetime-picker@^3.2.0, react-datetime-picker@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/react-datetime-picker/-/react-datetime-picker-3.2.1.tgz#d3a9631bcba17bd0047e6424cff0dfe242d9cf0e"
   integrity sha512-elybaAL7RJG7r0elYZze5/zQo1ds0v+v89tyZkzEShw+6I1EcveXwYPOMj3aq0k7D5kY/K+dC5dWYw0w4d9kmw==

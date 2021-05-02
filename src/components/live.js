@@ -44,10 +44,22 @@ class Live extends Component {
       },
       options: {
         scales: {
+          x: {
+            title: {
+              display: true,
+              color: 'red',
+              text: "Time"
+            }
+          },
           y: {
+            title: {
+              display: true,
+              color: 'red',
+              text: "Temperature(Celcius)"
+            },
             beginAtZero: false,
             suggestedMin: 20,
-            suggestedMax: 50
+            suggestedMax: 50,
           }
         }
       }
