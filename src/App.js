@@ -11,7 +11,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: 0
+      mode: 3
     }
   }
 
@@ -51,7 +51,7 @@ class App extends Component {
                 <ListGroup.Item action onClick={() => this.onClickMenuItem(4)}>Metrices</ListGroup.Item>
               </ListGroup>
             </Col>
-            <Col id="content-area" className="col-12 col-lg-10 d-flex justify-content-center align-items-center">
+            <Col id="content-area" className="col-12 col-lg-10 d-flex flex-wrap justify-content-center align-items-center">
               {this.selectContentToRender()}
             </Col>
           </Row>
