@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import DateTimePicker from 'react-datetime-picker';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { URL } from '../common';
 
@@ -23,15 +24,21 @@ class Query extends Component {
     axios.get(URL + `/query/min/${requestTimestamp}`)
         .then((response) => {
           if(response.data === "No rows fetched") {
-            alert("No data available.");
+            toast.info("No data available!");
+            clearInterval(this.interval);
           }
           else {
             this.setState({table:this.generateTable(response.data)});
+            toast.success("Data successfully loaded!"); 
           }
         })
         .catch((error) => {
-          console.log("Error in making get request.")
-          console.log(error);
+          if(error.message === "Network Error") {
+            toast.error("Cannot connect to server!");
+          }
+          else {
+            toast.error("Some unknown error occured!");
+          }
         })
   }
   
@@ -71,6 +78,7 @@ class Query extends Component {
           Query Data
         </Button>
         {this.state.table}
+        <ToastContainer position="bottom-right" limit={3}/>
       </React.Fragment>
     );
   }

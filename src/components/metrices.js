@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { URL } from '../common';
 
@@ -24,15 +25,21 @@ class Metrices extends Component {
     axios.get(URL + `/query/mtr/${lowerRequestTimestamp}-${upperRequestTimestamp}`)
         .then((response) => {
           if(response.data === "No data fetched") {
-            alert("No data available.");
+            toast.info("No data available!");
+            clearInterval(this.interval);
           }
           else {
             this.setState({table:this.generateTable(response.data)});
+            toast.success("Data successfully loaded!"); 
           }
         })
         .catch((error) => {
-          console.log("Error in making get request.")
-          console.log(error);
+          if(error.message === "Network Error") {
+            toast.error("Cannot connect to server!");
+          }
+          else {
+            toast.error("Some unknown error occured!");
+          }
         })
   }
 
@@ -72,6 +79,7 @@ class Metrices extends Component {
           Show
         </Button>
         {this.state.table}
+        <ToastContainer position="bottom-right" limit={3}/>
       </React.Fragment>
     );
   }

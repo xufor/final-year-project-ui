@@ -8,6 +8,7 @@ import {
   LinearScale, 
   Title 
 } from 'chart.js';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { URL } from '../common';
 
@@ -70,7 +71,7 @@ class Live extends Component {
     axios.get(URL + `/fetch/${this.lastTimestamp}`)
         .then((response) => {
           if(response.data === "No new data") {
-            alert("No newer data available.");
+            toast.info("No newer data available!");
             clearInterval(this.interval);
           }
           else {
@@ -94,9 +95,13 @@ class Live extends Component {
           }
         })
         .catch((error) => {
+          if(error.message === "Network Error") {
+            toast.error("Cannot connect to server!");
+          }
+          else {
+            toast.error("Some unknown error occured!");
+          }
           clearInterval(this.interval);
-          console.log("Error in making get request.")
-          console.log(error);
         })
         return this.requestDataAndUpdateChart; // returning reference to the same function
   }
@@ -109,6 +114,7 @@ class Live extends Component {
     return (
       <div id="live-char-wrapper">
         <canvas id="live-chart"></canvas>
+        <ToastContainer position="bottom-right" limit={1}/>
       </div>
     );
   }
