@@ -56,7 +56,7 @@ class Live extends Component {
             title: {
               display: true,
               color: 'red',
-              text: "Temperature(Celcius)"
+              text: "Temperature(Celsius)"
             },
             beginAtZero: false,
             suggestedMin: 20,
