@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { 
-  Chart, 
-  CategoryScale, 
-  LineController, 
-  LineElement, 
-  PointElement, 
-  LinearScale, 
-  Title 
+import {
+  Chart,
+  CategoryScale,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title
 } from 'chart.js';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
@@ -24,10 +24,9 @@ class Live extends Component {
 
   componentDidMount() {
     this.initializeChart();
-    this.lastTimestamp = Math.floor((new Date().getTime())/1000)-5;
-    this.interval = setInterval(this.requestDataAndUpdateChart(), 3000); 
+    this.interval = setInterval(this.requestDataAndUpdateChart(), 1000);
     // although requestDataAndUpdateChart is called here, it will return reference to itself
-    // using this we ensure that the function is called once and then further at intervals of 3 seconds
+    // using this we ensure that the function is called once and then further at intervals of 2 seconds
   }
 
   initializeChart = () => {
@@ -69,43 +68,41 @@ class Live extends Component {
   }
 
   requestDataAndUpdateChart = () => {
-    axios.get(URL + `/fetch/${this.lastTimestamp}`)
-        .then((response) => {
-          if(response.data === "No new data") {
-            toast.info("No newer data available!");
-            clearInterval(this.interval);
-          }
-          else {
-            const receivedData = response.data;
-            const splitData = receivedData.split("-");
-            const receivedTimestamp = Number.parseInt(splitData[0]);
-            const dateObject = new Date(receivedTimestamp * 1000);
-            let s = dateObject.getHours().toString() + 
-                    ":" + 
-                    dateObject.getMinutes().toString() + 
-                    ":" + 
-                    dateObject.getSeconds().toString();
-            if(this.liveChart.data.labels.length === 20) {
+    axios.get(URL + `/latest`)
+      .then((response) => {
+        if (response.data === "No data exists") {
+          toast.info("No data exists!");
+          clearInterval(this.interval);
+        }
+        else {
+          const receivedData = response.data;
+          const splitData = receivedData.split("-");
+          const receivedTimestamp = Number.parseInt(splitData[0]);
+          if (receivedTimestamp !== this.lastTimestamp) {
+            if (this.liveChart.data.labels.length === 15) {
               this.liveChart.data.labels.shift();
-              this.liveChart.data.datasets[0].data.shift(); 
+              this.liveChart.data.datasets[0].data.shift();
             }
-            this.liveChart.data.labels.push(s);
-            console.log(Number.parseFloat(splitData[1]));
-            this.liveChart.data.datasets[0].data.push(Number.parseFloat(splitData[1])); 
+            this.liveChart.data.labels.push(new Date(receivedTimestamp * 1000).toTimeString().substring(0, 8));
+            this.liveChart.data.datasets[0].data.push(Number.parseFloat(splitData[1]));
             this.liveChart.update();
             this.lastTimestamp = receivedTimestamp;
           }
-        })
-        .catch((error) => {
-          if(error.message === "Network Error") {
-            toast.error("Cannot connect to server!");
-          }
           else {
-            toast.error("Some unknown error occured!");
+            console.log("Stale data received.");
           }
-          clearInterval(this.interval);
-        })
-        return this.requestDataAndUpdateChart; // returning reference to the same function
+        }
+      })
+      .catch((error) => {
+        if (error.message === "Network Error") {
+          toast.error("Cannot connect to server!");
+        }
+        else {
+          toast.error("Some unknown error occured!");
+        }
+        clearInterval(this.interval);
+      })
+    return this.requestDataAndUpdateChart; // returning reference to the same function
   }
 
   componentWillUnmount() {
@@ -116,7 +113,7 @@ class Live extends Component {
     return (
       <div id="live-char-wrapper">
         <canvas id="live-chart"></canvas>
-        <ToastContainer position="bottom-right" limit={1}/>
+        <ToastContainer position="bottom-right" limit={1} />
       </div>
     );
   }
