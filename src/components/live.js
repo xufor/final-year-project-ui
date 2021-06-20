@@ -59,8 +59,9 @@ class Live extends Component {
               text: "Temperature(Celsius)"
             },
             beginAtZero: false,
-            suggestedMin: 20,
-            suggestedMax: 50,
+            suggestedMin: 32,
+            suggestedMax: 33,
+            precision: 0.01
           }
         }
       }
@@ -84,12 +85,13 @@ class Live extends Component {
                     dateObject.getMinutes().toString() + 
                     ":" + 
                     dateObject.getSeconds().toString();
-            if(this.liveChart.data.labels.length === 15) {
+            if(this.liveChart.data.labels.length === 20) {
               this.liveChart.data.labels.shift();
               this.liveChart.data.datasets[0].data.shift(); 
             }
             this.liveChart.data.labels.push(s);
-            this.liveChart.data.datasets[0].data.push(Math.random() * (50 - 20) + 20); 
+            console.log(Number.parseFloat(splitData[1]));
+            this.liveChart.data.datasets[0].data.push(Number.parseFloat(splitData[1])); 
             this.liveChart.update();
             this.lastTimestamp = receivedTimestamp;
           }
