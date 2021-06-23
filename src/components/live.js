@@ -79,7 +79,7 @@ class Live extends Component {
           const splitData = receivedData.split("-");
           const receivedTimestamp = Number.parseInt(splitData[0]);
           if (receivedTimestamp !== this.lastTimestamp) {
-            if (this.liveChart.data.labels.length === 15) {
+            if (this.liveChart.data.labels.length === 25) {
               this.liveChart.data.labels.shift();
               this.liveChart.data.datasets[0].data.shift();
             }
