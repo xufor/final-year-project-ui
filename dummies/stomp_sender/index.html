@@ -12,7 +12,8 @@
     <button onclick="sendMessage()">SEND</button>
 </body>
 <script>
-    var socket = new SockJS('http://20.198.64.187:8080/stomp-endpoint');
+    var socket = new SockJS('http://localhost:8080/stomp-endpoint');
+    // var socket = new SockJS('http://20.198.64.187:8080/stomp-endpoint');
     var stompClient = Stomp.over(socket);
     stompClient.connect({}, (frame) => {
         console.log('Connection Successful.');
