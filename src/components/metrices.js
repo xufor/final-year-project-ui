@@ -4,6 +4,7 @@ import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { URL } from '../common';
+import { isNull, round } from 'lodash';
 
 class Metrices extends Component {
   constructor(props) {
@@ -20,13 +21,12 @@ class Metrices extends Component {
   }
 
   onQueryClick = () => {
-    const lowerRequestTimestamp = Math.floor((this.pickedValue[0].getTime())/1000);
-    const upperRequestTimestamp = Math.ceil((this.pickedValue[1].getTime())/1000);
-    axios.get(URL + `/query/mtr/${lowerRequestTimestamp}-${upperRequestTimestamp}`)
+    const lowerRequestTimestamp = this.pickedValue[0].getTime();
+    const upperRequestTimestamp = this.pickedValue[1].getTime();
+    axios.get(URL + `/query-mtr/${lowerRequestTimestamp}/${upperRequestTimestamp}`)
         .then((response) => {
-          if(response.data === "No data fetched") {
+          if(isNull(response.data[0][0])) {
             toast.info("No data available!");
-            clearInterval(this.interval);
           }
           else {
             this.setState({table:this.generateTable(response.data)});
@@ -44,7 +44,6 @@ class Metrices extends Component {
   }
 
   generateTable = (tableData) => {
-    tableData = tableData.split("-")
     return(
       <Table striped bordered hover size="sm" className="w-75">
         <thead>
@@ -56,15 +55,15 @@ class Metrices extends Component {
         <tbody>
           <tr>
             <td>Minimum</td>
-            <td>{tableData[0]}</td>
+            <td>{round(tableData[0][0], 2)}</td>
           </tr>
           <tr>
             <td>Maximum</td>
-            <td>{tableData[1]}</td>
+            <td>{round(tableData[0][1], 2)}</td>
           </tr>
           <tr>
             <td>Average</td>
-            <td>{tableData[2]}</td>
+            <td>{round(tableData[0][2], 2)}</td>
           </tr>
         </tbody>
       </Table>

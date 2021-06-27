@@ -12,14 +12,14 @@
     <button onclick="sendMessage()">SEND</button>
 </body>
 <script>
-    var socket = new SockJS('http://localhost:8080/stomp-endpoint');
-    // var socket = new SockJS('http://20.198.64.187:8080/stomp-endpoint');
+    // var socket = new SockJS('http://localhost:8080/stomp-endpoint');
+    var socket = new SockJS('http://20.193.232.92:8080/stomp-endpoint');
     var stompClient = Stomp.over(socket);
     stompClient.connect({}, (frame) => {
         console.log('Connection Successful.');
     });
     const sendMessage = () => {
-        stompClient.send('/app/send-reading', {}, JSON.stringify({ 'timestamp': '145679714', 'reading': '35.67' }));
+        stompClient.send('/app/send-reading', {}, JSON.stringify({ 'timestamp': Date.now(), 'reading': Math.random() * 20 + 30 }));
     }
 </script>
 

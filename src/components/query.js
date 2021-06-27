@@ -4,6 +4,7 @@ import DateTimePicker from 'react-datetime-picker';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { URL } from '../common';
+import { isEmpty } from 'lodash';
 
 
 class Query extends Component {
@@ -20,12 +21,10 @@ class Query extends Component {
   }
 
   onQueryClick = () => {
-    const requestTimestamp = Math.floor((this.pickedValue.getTime())/1000);
-    axios.get(URL + `/query/min/${requestTimestamp}`)
+    axios.get(URL + `/query-few/${this.pickedValue.getTime()}`)
         .then((response) => {
-          if(response.data === "No rows fetched") {
+          if(isEmpty(response.data)) {
             toast.info("No data available!");
-            clearInterval(this.interval);
           }
           else {
             this.setState({table:this.generateTable(response.data)});
@@ -37,14 +36,13 @@ class Query extends Component {
             toast.error("Cannot connect to server!");
           }
           else {
+            console.log(error);
             toast.error("Some unknown error occured!");
           }
         })
   }
   
   generateTable = (tableData) => {
-    tableData = tableData.split("\n")
-    tableData.pop()
     return(
       <Table striped bordered hover size="sm" className="w-75">
         <thead>
@@ -56,11 +54,10 @@ class Query extends Component {
         <tbody>
           {
             tableData.map((element) => {
-              let arr = element.split(",")
               return (
-                <tr key={`${arr[0]}`}>
-                  <td>{new Date(Number.parseInt(arr[0])*1000).toTimeString()}</td>
-                  <td>{arr[1]}</td>
+                <tr key={`${element.timestamp}`}>
+                  <td>{new Date(element.timestamp).toGMTString()}</td>
+                  <td>{element.reading}</td>
                 </tr>
               );
             })

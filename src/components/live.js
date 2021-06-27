@@ -9,7 +9,6 @@ import {
   Title
 } from 'chart.js';
 import { ToastContainer, toast } from 'react-toastify';
-import { URL } from '../common';
 import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
@@ -24,7 +23,7 @@ class Live extends Component {
 
   componentDidMount() {
     this.initializeChart();
-    var socket = new SockJS(URL + ':8080/stomp-endpoint');
+    var socket = new SockJS('http://20.193.232.92:8080/stomp-endpoint');
     this.stompClient = Stomp.over(socket);
     this.stompClient.connect({}, (frame) => {
       this.stompClient.subscribe('/topic/readings', (reading) =>
