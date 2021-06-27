@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Receiver</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+
+<body>
+    <h1>RECEIVER</h1>
+</body>
+<script>
+    var socket = new SockJS('http://20.198.64.187:8080/stomp-endpoint');
+    var stompClient = Stomp.over(socket);
+    stompClient.connect({}, (frame) => {
+        stompClient.subscribe('/topic/readings', (reading) => {
+            console.log(JSON.parse(reading.body));
+        });
+    });
+</script>
+
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Sender</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+
+<body>
+    <h1>SENDER</h1>
+    <button onclick="sendMessage()">SEND</button>
+</body>
+<script>
+    var socket = new SockJS('http://20.198.64.187:8080/stomp-endpoint');
+    var stompClient = Stomp.over(socket);
+    stompClient.connect({}, (frame) => {
+        console.log('Connection Successful.');
+    });
+    const sendMessage = () => {
+        stompClient.send('/app/send-reading', {}, JSON.stringify({ 'timestamp': '145679714', 'reading': '35.67' }));
+    }
+</script>
+
+</html>
